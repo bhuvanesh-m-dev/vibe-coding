@@ -1,4 +1,4 @@
-# 🌌 Cosmotalker - AI Space Chat Webpage
+# 🌌 Cosmotalker - Python Library - WebPage
 
 **Created by:** Bhuvanesh M  
 **Concept Style:** Vibe Coding ✨  
