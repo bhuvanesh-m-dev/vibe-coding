@@ -1,1 +1,39 @@
-Cosmotalker WebpageThis repository hosts the official website for Cosmotalker, your terminal companion to chat with the stars and explore space data, powered by Python.About This WebpageThis Cosmotalker webpage was conceptualized and developed by Bhuvanesh M through a process of "vibe coding."The development of this webpage was greatly assisted by Gemini by Google, utilizing the Gemini 2.5 Flash model.Explore CosmotalkerVisit the live webpage to learn more about Cosmotalker: [https://bhuvaneshm.in/cosmotalker/]Other LinksHomepage (Bhuvanesh M): https://bhuvaneshm.inDEV.to (Bhuvanesh M): https://dev.to/bhuvaneshm_devCosmo4U for Linux Distros: https://bhuvaneshm.in/cosmo4u/
+# 🌌 Cosmotalker - AI Space Chat Webpage
+
+**Created by:** Bhuvanesh M  
+**Concept Style:** Vibe Coding ✨  
+**AI Model Used:** Gemini 2.5 Flash by Google
+
+---
+
+## 🚀 About This Project
+
+**Cosmotalker** is a space-themed AI chat webpage inspired by cosmic aesthetics and futuristic interaction.  
+This webpage was developed using the concept of **"vibe coding"**, blending creativity, clean UI, and AI power.
+
+> _"Not just coded, but vibed into existence."_ – Bhuvanesh M
+
+---
+
+## 💡 Tech Stack
+
+- HTML/CSS for front-end
+- Space-inspired design theme
+- AI generation: Powered by Gemini 2.5 Flash (Google)
+
+---
+
+## 📁 Live Project
+
+Visit the live version here:  
+🌐 [bhuvaneshm.in](https://bhuvaneshm.in)
+
+---
+
+## 📄 License
+
+This project is open-source. Feel free to fork, vibe, remix, and build upon it with credits!
+
+---
+
+### ⭐ Star the repo if you liked the vibe!
