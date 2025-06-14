@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmotalker – Chat with the Universe using Python</title>
+    <meta property="og:title" content="Cosmotalker – Chat with the Universe using Python">
+    <meta property="og:description" content="Your terminal companion to chat with the stars and explore space data.">
+    <meta property="og:image" content="https://placehold.co/1200x630/000000/FFFFFF?text=Cosmotalker+Space">
+    <meta property="og:url" content="https://yourwebsite.com"> <!-- Placeholder, update with actual URL -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0a0a0a;
+            color: #e0e0e0;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #e0e0e0;
+            text-shadow: 0 0 10px rgba(100, 255, 255, 0.7); /* Cyan glow default */
+        }
+
+        /* Custom glow animation for headline to prevent overlap */
+        h1.cosmic-glow {
+            animation: cosmic-glow-animate 2s infinite alternate;
+        }
+
+        @keyframes cosmic-glow-animate {
+            0% { text-shadow: 0 0 10px rgba(0, 255, 255, 0.7); }
+            100% { text-shadow: 0 0 20px rgba(0, 255, 255, 1), 0 0 30px rgba(150, 0, 255, 0.8); }
+        }
+
+        .section-gradient-bg {
+            background: linear-gradient(to bottom, #0a0a0a, #1a0a2a, #0a0a0a); /* Deep navy, violet, black */
+        }
+
+        .star-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle linear infinite;
+        }
+
+        /* Twinkling animation for stars */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.5; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Button glow effect */
+        .btn-glow {
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); /* Cyan glow */
+        }
+
+        .btn-glow:hover {
+            box-shadow: 0 0 25px rgba(0, 255, 255, 1), 0 0 35px rgba(0, 255, 255, 0.8);
+            transform: translateY(-2px);
+        }
+
+        /* Card glow effect */
+        .card-glow {
+            position: relative;
+            background-color: rgba(26, 0, 42, 0.7); /* Dark violet with transparency */
+            border: 1px solid rgba(100, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(100, 255, 255, 0.3);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card-glow::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(100, 255, 255, 0.1) 0%, transparent 70%);
+            transform: rotate(45deg);
+            animation: card-rotate 15s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card-glow:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes card-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Terminal simulator styling */
+        .terminal-simulator {
+            background-color: #000;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace;
+            color: #0f0; /* Green text for terminal */
+            white-space: pre-wrap;
+            overflow-x: auto;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            border: 1px solid #00ffff;
+        }
+
+        .typewriter span {
+            overflow: hidden;
+            border-right: .15em solid orange; /* Blinking cursor */
+            white-space: nowrap;
+            margin: 0 auto;
+            animation: typing 4s steps(40, end), blink-caret .75s step-end infinite;
+        }
+
+        /* Typing animation */
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        /* Blinking cursor animation */
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: orange }
+        }
+
+        /* Scroll fade-in effect */
+        .scroll-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .scroll-fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive styling for badges */
+        .badge-container img {
+            max-width: 100%; /* Ensure images don't overflow */
+            height: auto;
+        }
+
+        /* Specific styling for the Hero section background to ensure it covers the whole height */
+        #hero-section {
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px; /* Add padding for fixed navbar */
+        }
+
+        /* Scroll-to-top button styling */
+        #scrollToTopBtn {
+            display: none; /* Hidden by default */
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: linear-gradient(45deg, #8A2BE2, #00BFFF); /* Violet to Deep Sky Blue */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.7);
+            transition: all 0.3s ease-in-out;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        #scrollToTopBtn.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        #scrollToTopBtn:hover {
+            background: linear-gradient(45deg, #9370DB, #87CEEB); /* Lighter shades on hover */
+            box-shadow: 0 0 25px rgba(138, 43, 226, 1), 0 0 35px rgba(0, 191, 255, 0.8);
+        }
+
+        /* Navigation Bar Styling */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(10, 10, 10, 0.9); /* Semi-transparent dark background */
+            backdrop-filter: blur(8px); /* Frosted glass effect */
+            z-index: 100;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 255, 255, 0.2);
+        }
+
+        .navbar-container {
+            display: flex;
+            justify-content: flex-end; /* Align items to the right */
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .navbar-link {
+            color: #e0e0e0;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            margin-left: 1.5rem;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .navbar-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background-color: #00ffff; /* Cyan underline */
+            transition: width 0.3s ease-out, left 0.3s ease-out;
+        }
+
+        .navbar-link:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        .navbar-link:hover {
+            color: #00ffff; /* Cyan on hover */
+            text-shadow: 0 0 8px #00ffff;
+        }
+
+        /* Mobile adjustments for navbar */
+        @media (max-width: 768px) {
+            .navbar-container {
+                justify-content: center; /* Center links on smaller screens */
+                flex-wrap: wrap; /* Allow links to wrap */
+            }
+            .navbar-link {
+                margin: 0.5rem 0.8rem; /* Adjust margin for mobile */
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-200">
+
+    <!-- Star Background Animation Container -->
+    <div class="star-background" id="star-bg"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="https://bhuvaneshm.in" target="_blank" rel="noopener noreferrer" class="navbar-link">Home</a>
+            <a href="https://dev.to/bhuvaneshm_dev" target="_blank" rel="noopener noreferrer" class="navbar-link">DEV</a>
+            <a href="https://bhuvaneshm.in/cosmo4u/" target="_blank" rel="noopener noreferrer" class="navbar-link">Try Cosmo4U</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero-section" class="relative w-full text-center py-20 md:py-32 section-gradient-bg">
+        <div class="container mx-auto px-4 relative z-10">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-gold-400 cosmic-glow">
+                Explore the Universe with Cosmotalker
+            </h1>
+            <p class="text-lg md:text-2xl mb-8 font-light italic">
+                Talk to the cosmos. Powered by Python. Driven by curiosity.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                <a href="#demo-section" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 btn-glow flex items-center justify-center">
+                    <i class="fas fa-play-circle mr-2"></i> Try Now
+                </a>
+                <a href="https://github.com/bhuvanesh-m-dev/cosmotalker" target="_blank" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 btn-glow flex items-center justify-center">
+                    <i class="fab fa-github mr-2"></i> View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview & Purpose Section -->
+    <section id="overview-purpose" class="py-16 md:py-24 section-gradient-bg scroll-fade-in">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-bold text-center mb-12">
+                <i class="fas fa-box-open text-cyan-400 mr-3"></i> What is Cosmotalker?
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                <div class="card-glow rounded-xl p-8 shadow-xl flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 text-gold-400">Your Cosmic Terminal Companion</h3>
+                        <p class="text-md leading-relaxed text-gray-300">
+                            Cosmotalker is a powerful Python package designed for space enthusiasts, developers, and learners. It brings the universe right into your terminal, providing quick access to astronomical data, real-time updates, and AI-powered insights, all offline or online.
+                        </p>
+                    </div>
+                </div>
+                <div class="card-glow rounded-xl p-8 shadow-xl">
+                    <h3 class="text-2xl font-bold mb-4 text-gold-400">Key Features:</h3>
+                    <ul class="space-y-4 text-md text-gray-300">
+                        <li class="flex items-center">
+                            <i class="fas fa-globe-americas text-purple-400 text-xl mr-3"></i>
+                            <span class="font-semibold">Planetary Data:</span> Detailed information on planets, moons, and celestial bodies.
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-camera-retro text-cyan-400 text-xl mr-3"></i>
+                            <span class="font-semibold">Astronomy Picture of the Day (APOD):</span> Daily stunning images from NASA.
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-satellite-dish text-magenta-400 text-xl mr-3"></i>
+                            <span class="font-semibold">Satellite Tracking:</span> Locate and track active satellites.
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-rocket text-gold-400 text-xl mr-3"></i>
+                            <span class="font-semibold">SpaceX Launches:</span> Up-to-date information on SpaceX missions.
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-search text-blue-400 text-xl mr-3"></i>
+                            <span class="font-semibold">Integrated Search:</span> Wikipedia and Ecosia search capabilities.
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-wifi text-red-400 text-xl mr-3 rotate-45"></i>
+                            <span class="font-semibold">Offline Support:</span> Access cached data even without an internet connection.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation & Usage Section -->
+    <section id="installation-usage" class="py-16 md:py-24 bg-gray-900 scroll-fade-in">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-bold text-center mb-12">
+                <i class="fas fa-wrench text-gold-400 mr-3"></i> Get Started with Cosmotalker
+            </h2>
+            <div class="max-w-3xl mx-auto bg-gray-800 rounded-xl shadow-2xl overflow-hidden border border-cyan-700">
+                <div class="p-6 md:p-8">
+                    <h3 class="text-xl md:text-2xl font-semibold mb-4 text-cyan-400 flex items-center">
+                        <i class="fas fa-terminal mr-3"></i> Installation
+                    </h3>
+                    <div class="relative bg-gray-900 p-4 rounded-lg mb-6 shadow-inner">
+                        <pre class="text-gray-200 text-sm md:text-base overflow-x-auto"><code id="install-code">pip install cosmotalker</code></pre>
+                        <button class="absolute top-3 right-3 bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold py-1 px-3 rounded-md transition duration-300 btn-glow" onclick="copyCode('install-code')">
+                            <i class="fas fa-copy mr-1"></i> Copy
+                        </button>
+                    </div>
+
+                    <h3 class="text-xl md:text-2xl font-semibold mb-4 text-cyan-400 flex items-center">
+                        <i class="fas fa-code mr-3"></i> Basic Usage
+                    </h3>
+                    <div class="relative bg-gray-900 p-4 rounded-lg shadow-inner">
+                        <pre class="text-gray-200 text-sm md:text-base overflow-x-auto"><code id="usage-code">import cosmotalker
+print(cosmotalker.get("earth"))
+print(cosmotalker.apod())
+print(cosmotalker.wiki("black hole"))</code></pre>
+                        <button class="absolute top-3 right-3 bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold py-1 px-3 rounded-md transition duration-300 btn-glow" onclick="copyCode('usage-code')">
+                            <i class="fas fa-copy mr-1"></i> Copy
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo or Simulation Section -->
+    <section id="demo-section" class="py-16 md:py-24 bg-gray-900 scroll-fade-in">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-bold text-center mb-12">
+                <i class="fas fa-laptop-code text-cyan-400 mr-3"></i> Experience Cosmotalker
+            </h2>
+            <div class="max-w-4xl mx-auto p-4 rounded-xl shadow-2xl bg-gray-950 border border-cyan-800">
+                <div class="terminal-simulator min-h-[300px] flex flex-col justify-start">
+                    <div class="text-gray-500 mb-2">
+                        <span class="text-green-400">user@cosmotalker</span>:<span class="text-blue-400">~</span>$ python
+                    </div>
+                    <div class="typewriter-text" data-text=">>> import cosmotalker"></div>
+                    <div class="typewriter-text" data-text=">>> print(cosmotalker.get('mars'))"></div>
+                    <div class="text-green-400 my-2">
+                        Mars: The Red Planet, fourth from the Sun... (full data would appear here)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap / What You Can Do Section -->
+    <section id="roadmap" class="py-16 md:py-24 bg-gray-900 scroll-fade-in">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-bold text-center mb-12">
+                <i class="fas fa-map-marked-alt text-magenta-400 mr-3"></i> Our Cosmic Roadmap
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card-glow rounded-xl p-6 shadow-xl flex flex-col items-center text-center">
+                    <i class="fas fa-galaxy text-6xl text-cyan-400 mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-2">Galaxy Data Support</h3>
+                    <p class="text-gray-300">Expand data to include galaxies, nebulae, and deep-sky objects.</p>
+                </div>
+                <div class="card-glow rounded-xl p-6 shadow-xl flex flex-col items-center text-center">
+                    <i class="fas fa-image text-6xl text-purple-400 mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-2">Enhanced Image Resolution</h3>
+                    <p class="text-gray-300">Improve image preview quality and options for high-res downloads.</p>
+                </div>
+                <div class="card-glow rounded-xl p-6 shadow-xl flex flex-col items-center text-center">
+                    <i class="fas fa-newspaper text-6xl text-gold-400 mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-2">Real-time Space News</h3>
+                    <p class="text-gray-300">Integrate live feeds for breaking space and astronomy news.</p>
+                </div>
+                <div class="card-glow rounded-xl p-6 shadow-xl flex flex-col items-center text-center">
+                    <i class="fas fa-server text-6xl text-blue-400 mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-2">More Offline Features</h3>
+                    <p class="text-gray-300">Caching more data and functionalities for robust offline usage.</p>
+                </div>
+                <div class="card-glow rounded-xl p-6 shadow-xl flex flex-col items-center text-center">
+                    <i class="fas fa-users-cog text-6xl text-green-400 mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-2">Community Contributions</h3>
+                    <p class="text-gray-300">We welcome contributions! Fork the project, submit issues, or open pull requests.</p>
+                    <div class="mt-4 space-x-4">
+                        <a href="https://github.com/your-github-repo" target="_blank" class="text-blue-400 hover:text-blue-300"><i class="fab fa-github"></i> GitHub</a>
+                        <a href="https://github.com/your-github-repo/issues" target="_blank" class="text-blue-400 hover:text-blue-300"><i class="fas fa-exclamation-circle"></i> Issues</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cosmotalker's Cosmic Footprint Section -->
+    <section id="cosmic-footprint" class="py-16 md:py-24 section-gradient-bg scroll-fade-in">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-bold text-center mb-12">
+                <i class="fas fa-fingerprint text-gold-400 mr-3"></i> Cosmotalker's Cosmic Footprint
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 text-center">
+                <a href="https://socket.dev/pypi/package/cosmotalker" target="_blank" class="card-glow rounded-xl p-6 shadow-xl flex flex-col items-center justify-center hover:scale-105 transform transition-transform duration-300">
+                    <i class="fas fa-plug text-6xl text-cyan-400 mb-4"></i>
+                    <h3 class="text-xl font-bold">Socket.dev</h3>
+                </a>
+                <a href="https://data.safetycli.com/packages/pypi/cosmotalker/" target="_blank" class="card-glow rounded-xl p-6 shadow-xl flex flex-col items-center justify-center hover:scale-105 transform transition-transform duration-300">
+                    <i class="fas fa-shield-alt text-6xl text-purple-400 mb-4"></i>
+                    <h3 class="text-xl font-bold">SafetyCLI Data</h3>
+                </a>
+                <a href="https://pepy.tech/projects/cosmotalker?timeRange=threeMonths&category=version&includeCIDownloads=true&granularity=daily&viewType=stacked&versions=1.9.81%2C1.5.1%2C1.6.1%2C1.6%2C1.8.3" target="_blank" class="card-glow rounded-xl p-6 shadow-xl flex flex-col items-center justify-center hover:scale-105 transform transition-transform duration-300">
+                    <i class="fas fa-chart-line text-6xl text-gold-400 mb-4"></i>
+                    <h3 class="text-xl font-bold">PePy.tech Stats</h3>
+                </a>
+                <a href="https://repology.org/project/python%3Acosmotalker/information" target="_blank" class="card-glow rounded-xl p-6 shadow-xl flex flex-col items-center justify-center hover:scale-105 transform transition-transform duration-300">
+                    <i class="fas fa-sync-alt text-6xl text-blue-400 mb-4"></i>
+                    <h3 class="text-xl font-bold">Repology</h3>
+                </a>
+                <a href="https://repology.org/project/python%3Acosmotalker/badges" target="_blank" class="card-glow rounded-xl p-6 shadow-xl flex flex-col items-center justify-center hover:scale-105 transform transition-transform duration-300">
+                    <i class="fas fa-award text-6xl text-green-400 mb-4"></i>
+                    <h3 class="text-xl font-bold">Repology Badges</h3>
+                </a>
+                <a href="https://www.piwheels.org/project/cosmotalker/" target="_blank" class="card-glow rounded-xl p-6 shadow-xl flex flex-col items-center justify-center hover:scale-105 transform transition-transform duration-300">
+                    <i class="fas fa-gear text-6xl text-orange-400 mb-4"></i>
+                    <h3 class="text-xl font-bold">Piwheels</h3>
+                </a>
+                <a href="https://x.com/The_Python_DEV/status/1917930553929613389" target="_blank" class="card-glow rounded-xl p-6 shadow-xl flex flex-col items-center justify-center hover:scale-105 transform transition-transform duration-300">
+                    <i class="fab fa-x-twitter text-6xl text-gray-400 mb-4"></i>
+                    <h3 class="text-xl font-bold">X Post by The_Python_DEV</h3>
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 py-10 md:py-16 border-t border-cyan-800 section-gradient-bg">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 mb-8">
+                <a href="https://github.com/bhuvanesh-m-dev/cosmotalker" target="_blank" class="text-gray-300 hover:text-cyan-400 text-lg transition duration-300 flex items-center">
+                    <i class="fab fa-github mr-2"></i> GitHub Repo
+                </a>
+                <a href="https://pypi.org/project/cosmotalker/" target="_blank" class="text-gray-300 hover:text-purple-400 text-lg transition duration-300 flex items-center">
+                    <i class="fas fa-box text-sm mr-2"></i> PyPI Page
+                </a>
+            </div>
+            <p class="text-gray-500 text-sm mb-4">
+                Contact: <a href="mailto:bhuvaneshm.developer@gmail.com" class="text-cyan-500 hover:underline">bhuvaneshm.developer@gmail.com</a>
+            </p>
+            <p class="text-gray-500 text-sm">&copy; 2025 Cosmotalker. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scroll-to-top button -->
+    <button id="scrollToTopBtn" title="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Star background animation
+        function createStars() {
+            const starBg = document.getElementById('star-bg');
+            const numStars = 100; // Number of stars
+            for (let i = 0; i < numStars; i++) {
+                let star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = star.style.height = `${Math.random() * 3 + 1}px`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                starBg.appendChild(star);
+            }
+        }
+        createStars();
+
+        // Copy code to clipboard function
+        function copyCode(elementId) {
+            const codeElement = document.getElementById(elementId);
+            const textToCopy = codeElement.innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                // Optional: Provide visual feedback like a temporary "Copied!" message
+                const button = codeElement.nextElementSibling;
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check mr-1"></i> Copied!';
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+
+        // Typewriter effect for terminal simulator
+        document.addEventListener('DOMContentLoaded', () => {
+            const typewriterElements = document.querySelectorAll('.typewriter-text');
+            typewriterElements.forEach(element => {
+                const text = element.getAttribute('data-text');
+                element.innerHTML = `<span class="typewriter"></span>`;
+                const span = element.querySelector('.typewriter');
+                let i = 0;
+                function typeWriter() {
+                    if (i < text.length) {
+                        span.textContent += text.charAt(i);
+                        i++;
+                        // Added a small delay variation to make it more natural, while ensuring character by character
+                        setTimeout(typeWriter, 40 + Math.random() * 30);
+                    } else {
+                        // Remove blinking cursor after typing by removing the border-right property
+                        span.style.borderRight = 'none';
+                    }
+                }
+                typeWriter();
+            });
+
+            // Intersection Observer for scroll-fade-in
+            const fadeInElements = document.querySelectorAll('.scroll-fade-in');
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            fadeInElements.forEach(element => {
+                observer.observe(element);
+            });
+
+            // Scroll-to-top button logic
+            const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+            window.onscroll = function() { scrollFunction() };
+
+            function scrollFunction() {
+                if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                    scrollToTopBtn.classList.add('show');
+                } else {
+                    scrollToTopBtn.classList.remove('show');
+                }
+            }
+
+            scrollToTopBtn.addEventListener("click", function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
