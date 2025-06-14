@@ -4,7 +4,7 @@ Welcome to **vibe-coding**, an open-source initiative by [Bhuvanesh M](https://b
 
 This repository is a growing collection of:
 
-* 🔮 AI prompts I’ve crafted (ChatGPT, VideoCrafter, Sora, etc.)
+* 🔮 AI prompts I’ve crafted 
 * 🎥 Text-to-video experiments
 * 🧠 Prompt engineering logs
 * ✨ Creative use cases with generative tools
