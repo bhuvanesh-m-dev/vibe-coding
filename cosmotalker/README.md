@@ -26,7 +26,7 @@ This webpage was developed using the concept of **"vibe coding"**, blending crea
 ## 📁 Live Project
 
 Visit the live version here:  
-🌐 [bhuvaneshm.in](https://bhuvaneshm.in)
+🌐 [bhuvaneshm.in](https://bhuvaneshm.in/cosmotalker)
 
 ---
 
