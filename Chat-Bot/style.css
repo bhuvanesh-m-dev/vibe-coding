@@ -1,0 +1,156 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f2f5; /* Soft light gray background */
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.chat-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Stronger shadow for depth */
+    width: 95%;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 550px; /* Slightly taller chat container */
+}
+
+h1 {
+    text-align: center;
+    padding: 25px;
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* Gradient header */
+    color: white;
+    margin: 0;
+    font-size: 2em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.chat-log {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    max-height: 450px; /* Adjust based on desired chat window height */
+    word-wrap: break-word;
+    line-height: 1.7;
+    background-color: #fcfdff; /* Very subtle light blue */
+}
+
+.message {
+    margin-bottom: 18px; /* More spacing between messages */
+    padding: 14px 20px;
+    border-radius: 25px; /* More rounded bubbles */
+    max-width: 85%;
+    word-break: break-word;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08); /* Soft shadow for bubbles */
+    transition: transform 0.2s ease-out; /* Add subtle hover effect */
+}
+
+.message:hover {
+    transform: translateY(-2px); /* Lift on hover */
+}
+
+.user-message {
+    background-color: #e3f2fd; /* Light blue bubble */
+    color: #1a237e; /* Darker blue text */
+    align-self: flex-end;
+    margin-left: auto;
+    border-bottom-right-radius: 8px; /* Unique corner for user */
+}
+
+.bot-message {
+    background-color: #e8f5e9; /* Light green bubble */
+    color: #1b5e20; /* Darker green text */
+    align-self: flex-start;
+    margin-right: auto;
+    border-bottom-left-radius: 8px; /* Unique corner for bot */
+}
+
+.typing-indicator {
+    background-color: #f0f0f0;
+    color: #666;
+    font-style: italic;
+    opacity: 0.8;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.8; }
+    50% { opacity: 0.5; }
+    100% { opacity: 0.8; }
+}
+
+.chat-input-area {
+    display: flex;
+    padding: 20px;
+    border-top: 1px solid #e0e0e0;
+    background-color: #ffffff;
+    gap: 10px; /* Spacing between input and button */
+}
+
+.chat-input-area input {
+    flex-grow: 1;
+    padding: 14px 20px;
+    border: 1px solid #bdbdbd;
+    border-radius: 28px; /* More rounded input */
+    font-size: 1.05em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.chat-input-area input:focus {
+    border-color: #2575fc; /* Matches gradient end color */
+    box-shadow: 0 0 0 4px rgba(37, 117, 252, 0.2); /* Soft glow focus */
+    outline: none;
+}
+
+.chat-input-area button {
+    background: linear-gradient(to right, #4CAF50, #8BC34A); /* Green gradient button */
+    color: white;
+    border: none;
+    border-radius: 28px; /* More rounded button */
+    padding: 14px 30px;
+    cursor: pointer;
+    font-size: 1.05em;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Shadow for button */
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.chat-input-area button:hover {
+    background: linear-gradient(to right, #45a049, #7cb342); /* Darker green on hover */
+    transform: translateY(-2px); /* Lift button on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.chat-input-area button:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Scrollbar styles for better aesthetics */
+.chat-log::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-log::-webkit-scrollbar-track {
+    background: #e0e0e0;
+    border-radius: 10px;
+}
+
+.chat-log::-webkit-scrollbar-thumb {
+    background: #a0a0a0;
+    border-radius: 10px;
+}
+
+.chat-log::-webkit-scrollbar-thumb:hover {
+    background: #757575;
+}
