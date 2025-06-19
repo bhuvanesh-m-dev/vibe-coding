@@ -1,1 +1,134 @@
+/* Custom CSS for the chat application */
 
+/* Font family for the whole application */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Base styles for the chat container to ensure it takes full height */
+.flex-grow {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Styling for the chat messages container */
+#chat-container {
+    overflow-y: auto; /* Enable scrolling for chat history */
+    scroll-behavior: smooth; /* Smooth scrolling to new messages */
+}
+
+/* General styling for chat bubbles */
+.chat-bubble {
+    padding: 0.8rem 1.2rem; /* Slightly reduced padding for a minimalistic feel */
+    border-radius: 0.75rem; /* Consistent rounded corners */
+    max-width: 80%; /* Maximum width of the bubble */
+    position: relative; /* For positioning the copy button */
+    word-wrap: break-word; /* Ensure long words break */
+    white-space: pre-wrap; /* Preserve whitespace and line breaks for code */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04); /* More subtle shadow */
+}
+
+/* Styling for user messages */
+.user-message {
+    background-color: #e0f2fe; /* Light blue background */
+    color: #1e40af; /* Dark blue text */
+    align-self: flex-end; /* Align to the right */
+    margin-left: auto; /* Push to the right */
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Very subtle border */
+    border-bottom-right-radius: 0.5rem; /* Slightly less rounded at bottom right */
+}
+
+/* Styling for AI messages */
+.ai-message {
+    background-color: #f8fafc; /* Very light gray background */
+    color: #374151; /* Dark gray text */
+    align-self: flex-start; /* Align to the left */
+    margin-right: auto; /* Push to the left */
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Very subtle border */
+    border-bottom-left-radius: 0.5rem; /* Slightly less rounded at bottom left */
+}
+
+/* Styling for the copy button within chat bubbles */
+.copy-button {
+    position: absolute; /* Position relative to the bubble */
+    top: 0.4rem; /* Adjusted top for better alignment */
+    right: 0.4rem; /* Adjusted right for better alignment */
+    background-color: rgba(0, 0, 0, 0.2); /* Semi-transparent black background */
+    color: white; /* White icon */
+    padding: 0.2rem 0.4rem; /* Smaller padding for a less intrusive button */
+    border-radius: 0.25rem; /* Slightly smaller rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 0.65rem; /* Smaller font size */
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.2s ease-in-out; /* Smooth transition for opacity */
+    display: flex; /* Use flex to center icon and text if present */
+    align-items: center;
+    justify-content: center;
+}
+
+/* Show copy button on hover over the chat bubble */
+.chat-bubble:hover .copy-button {
+    opacity: 1; /* Show button on hover */
+}
+
+/* Specific styling for code blocks within messages */
+.chat-bubble pre {
+    background-color: #1e293b; /* Dark background for code blocks */
+    color: #cbd5e1; /* Light text color for code */
+    padding: 0.75rem; /* Padding inside code block */
+    border-radius: 0.5rem; /* Rounded corners */
+    overflow-x: auto; /* Enable horizontal scrolling for long lines of code */
+    margin-top: 0.5rem; /* Space above code block */
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; /* Monospace font */
+    font-size: 0.875rem; /* Slightly smaller font size */
+}
+
+/* Highlight for code elements inside pre */
+.chat-bubble pre code {
+    display: block; /* Ensure code takes full width */
+}
+
+/* Share button specific styling */
+#shareButton {
+    z-index: 100; /* Ensure it's above other content */
+}
+
+/* Share Modal specific styling */
+#shareModal {
+    z-index: 1000; /* Ensure modal is on top of everything */
+}
+
+/* Input focus style override for better visibility */
+#user-input:focus {
+    border-color: #3b82f6; /* Blue border on focus */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4); /* Blue ring on focus */
+}
+
+/* Responsive adjustments using media queries */
+@media (max-width: 768px) {
+    .chat-bubble {
+        max-width: 90%; /* Wider bubbles on small screens */
+        padding: 0.7rem 1rem; /* Slightly smaller padding for mobile */
+    }
+
+    .flex-grow {
+        margin-top: 0;
+        margin-bottom: 0;
+        border-radius: 0;
+    }
+
+    #user-input {
+        padding: 0.75rem; /* Slightly smaller padding for input */
+    }
+
+    #send-button {
+        padding: 0.75rem 1rem; /* Adjust send button padding */
+    }
+
+    #shareButton {
+        top: 1rem;
+        right: 1rem;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+    }
+}
