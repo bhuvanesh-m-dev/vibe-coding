@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', async () => {
     const chatContainer = document.getElementById('chat-container');
     const shareFeatureContainer = document.getElementById('share-feature-container'); // Container for injected share HTML
