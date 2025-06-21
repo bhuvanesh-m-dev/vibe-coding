@@ -1,1 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CosmoMate by CosmoTalker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        #chat-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        #chat-container::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+        #chat-container::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 10px;
+        }
+        #chat-container::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-button:hover {
+            color: black;
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen antialiased bg-gray-100">
+    <div class="flex flex-col flex-grow w-full max-w-4xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden md:my-8 my-0">
+        <header class="flex items-center justify-between p-4 bg-gradient-to-r from-purple-600 to-indigo-700 text-white shadow-md rounded-t-lg">
+            <h1 class="text-2xl font-bold">CosmoMate by CosmoTalker</h1>
+            <button id="share-button" class="bg-white text-purple-700 font-semibold py-2 px-4 rounded-full shadow-lg hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-105">
+                <i class="fas fa-share-alt mr-2"></i>Share
+            </button>
+        </header>
+
+        <main id="chat-container" class="flex-grow p-4 overflow-y-auto bg-gray-50">
+            <div class="flex items-start mb-4">
+                <img src="https://placehold.co/40x40/6b46c1/ffffff?text=CM" alt="CosmoMate Avatar" class="w-10 h-10 rounded-full mr-3 border-2 border-purple-500">
+                <div class="bg-purple-100 text-purple-800 p-3 rounded-lg max-w-xs md:max-w-md shadow-sm">
+                    <p class="font-semibold text-sm">CosmoMate</p>
+                    <p class="text-sm">Hello! I'm CosmoMate, your AI assistant from CosmoTalker. How can I help you today?</p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="p-4 bg-gray-200 border-t border-gray-300 rounded-b-lg">
+            <div class="flex items-center">
+                <textarea id="user-input" rows="1" class="flex-grow p-3 rounded-l-full border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 resize-none overflow-hidden" placeholder="Type your message..."></textarea>
+                <button id="send-button" class="bg-purple-600 text-white p-3 rounded-r-full hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200 shadow-md">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <div id="share-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 class="text-2xl font-bold mb-4 text-center text-purple-700">Share Conversation</h2>
+            <p class="text-gray-700 mb-4 text-center">Copy the link below to share this conversation:</p>
+            <div class="flex items-center border border-gray-300 rounded-lg p-2 bg-gray-50 mb-4">
+                <input type="text" id="share-link-input" class="flex-grow bg-transparent border-none outline-none text-gray-800 text-sm" readonly>
+                <button id="copy-link-button" class="ml-2 bg-purple-500 hover:bg-purple-600 text-white py-2 px-3 rounded-md transition-all duration-200 flex items-center">
+                    <i class="fas fa-copy mr-1"></i> Copy
+                </button>
+            </div>
+            <div class="flex justify-center space-x-4">
+                <a id="whatsapp-share" href="#" target="_blank" class="text-green-600 hover:text-green-700 text-4xl transition-colors duration-200">
+                    <i class="fab fa-whatsapp-square"></i>
+                </a>
+                <a id="telegram-share" href="#" target="_blank" class="text-blue-500 hover:text-blue-600 text-4xl transition-colors duration-200">
+                    <i class="fab fa-telegram"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
 
