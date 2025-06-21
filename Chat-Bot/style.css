@@ -1,1 +1,172 @@
+/* style.css */
 
+/*
+  This file contains custom CSS rules that complement Tailwind CSS.
+  It's primarily used for specific animations, custom scrollbar styling,
+  and fine-tuning elements where Tailwind classes might not be sufficient or
+  where a custom, reusable style is preferred.
+*/
+
+/* --- General Body and Container Styles --- */
+body {
+    /* Font family is set inline in index.html for simplicity due to CDN loading order,
+       but if you have a local font, you'd import it here. */
+    /* font-family: 'Inter', sans-serif; */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Ensure the main chat container takes full available height on smaller screens */
+@media (max-width: 767px) {
+    .h-screen {
+        height: 100vh;
+    }
+    .md\:my-8 {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+    .rounded-lg {
+        border-radius: 0;
+    }
+    .rounded-t-lg {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+    .rounded-b-lg {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+}
+
+/* --- Chat Message Area Scrollbar Styling --- */
+/* For WebKit browsers (Chrome, Safari) */
+#chat-messages::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+#chat-messages::-webkit-scrollbar-track {
+    background: #e2e8f0; /* Light blue-gray track */
+    border-radius: 10px; /* Rounded corners for the track */
+}
+
+#chat-messages::-webkit-scrollbar-thumb {
+    background: #94a3b8; /* Darker blue-gray thumb */
+    border-radius: 10px; /* Rounded corners for the thumb */
+}
+
+#chat-messages::-webkit-scrollbar-thumb:hover {
+    background: #64748b; /* Even darker on hover */
+}
+
+/* --- Typing Indicator Dots Animation --- */
+.typing-indicator span {
+    animation: bounce 0.8s infinite ease-in-out;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* --- Typewriter Effect for AI Responses --- */
+.message.ai .typewriter-text {
+    /* Important: These properties make the typing effect possible */
+    overflow: hidden; /* Ensures text is hidden until typed */
+    white-space: pre-wrap; /* Maintains whitespace and wraps text */
+    word-break: break-word; /* Breaks long words */
+    border-right: .15em solid purple; /* The blinking cursor */
+    animation:
+        typing 3s steps(40, end), /* Adjust duration and steps based on desired speed */
+        blink-caret .75s step-end infinite;
+}
+
+/* Keyframes for the typing animation (defined in index.html for visibility, but could be here) */
+/* @keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: orange }
+} */
+
+/* Ensure the animations are cleared after text is fully typed */
+.message.ai.typed .typewriter-text {
+    border-right: none; /* Hide caret after typing */
+    animation: none; /* Stop animation after typing */
+}
+
+/* --- Input Send Button Animations (Shade In/Out) --- */
+/* Keyframes for fade animations (defined in index.html for visibility) */
+/* @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(10px); }
+} */
+
+/* Apply to elements dynamically using JS */
+/* .fade-in, .fade-out classes are added/removed by script.js */
+
+/* --- Modal Overlay (from index.html, but custom styles could be here) --- */
+/*
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+}
+.close-button {
+    color: #aaa;
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+*/
+
+/* Ensure the textarea grows smoothly */
+textarea {
+    transition: height 0.2s ease-in-out;
+}
