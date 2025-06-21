@@ -8,10 +8,7 @@ define('API_KEY_USAGE_FILE', STORAGE_DIR . 'api_key_usage.json');
 define('USER_DATA_FILE', STORAGE_DIR . 'user_data.txt');
 define('URL_ID_FILE', STORAGE_DIR . 'url-id.txt');
 define('OPENROUTER_API_URL', 'https://openrouter.ai/api/v1/chat/completions');
-
-// IMPORTANT: Set your actual OpenRouter model name here!
-define('OPENROUTER_MODEL', 'your model name here!'); // <-- CHANGE THIS TO YOUR MODEL
-
+define('OPENROUTER_MODEL', 'LLM model name ');
 define('API_USAGE_LIMIT', 25);
 define('API_USAGE_WINDOW_SECONDS', 86400);
 
@@ -144,7 +141,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
 
-        // Prepare the payload with the correct model
         $payload = [
             "model" => OPENROUTER_MODEL,
             "messages" => [["role" => "user", "content" => $prompt]]
@@ -170,13 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($httpCode !== 200) {
-            // Improved error output for easier debugging
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'OpenRouter API error',
-                'http_code' => $httpCode,
-                'api_response' => $response
-            ]);
+            echo json_encode(['status' => 'error', 'message' => 'OpenRouter API error', 'http_code' => $httpCode]);
             exit();
         }
 
@@ -186,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($data['choices'][0]['message']['content'])) {
             echo json_encode(['status' => 'success', 'message' => $data['choices'][0]['message']['content']]);
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Invalid API response.', 'api_response' => $response]);
+            echo json_encode(['status' => 'error', 'message' => 'Invalid API response.']);
         }
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Unsupported Content-Type.']);
