@@ -1,172 +1,383 @@
-/* style.css */
-
-/*
-  This file contains custom CSS rules that complement Tailwind CSS.
-  It's primarily used for specific animations, custom scrollbar styling,
-  and fine-tuning elements where Tailwind classes might not be sufficient or
-  where a custom, reusable style is preferred.
-*/
-
-/* --- General Body and Container Styles --- */
-body {
-    /* Font family is set inline in index.html for simplicity due to CDN loading order,
-       but if you have a local font, you'd import it here. */
-    /* font-family: 'Inter', sans-serif; */
+/* General Body and HTML styles */
+body, html {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f2f5; /* Light gray background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Full viewport height */
+    overflow: hidden; /* Prevent body scroll, chat messages will scroll */
+    color: #333;
 }
 
-/* Ensure the main chat container takes full available height on smaller screens */
-@media (max-width: 767px) {
-    .h-screen {
-        height: 100vh;
-    }
-    .md\:my-8 {
-        margin-top: 0;
-        margin-bottom: 0;
-    }
-    .rounded-lg {
-        border-radius: 0;
-    }
-    .rounded-t-lg {
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-    }
-    .rounded-b-lg {
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-    }
+/* Main chat container */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 768px; /* Max width for desktop */
+    height: 100vh; /* Full viewport height on mobile */
+    max-height: 90vh; /* Max height for desktop to leave some margin */
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    overflow: hidden;
+    margin: 20px; /* Margin for desktop view */
+    position: relative; /* For header positioning */
 }
 
-/* --- Chat Message Area Scrollbar Styling --- */
-/* For WebKit browsers (Chrome, Safari) */
-#chat-messages::-webkit-scrollbar {
-    width: 8px; /* Width of the scrollbar */
+/* Header styling */
+.chat-header {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); /* Gradient header */
+    color: #ffffff;
+    padding: 15px 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10; /* Ensure header is above messages */
 }
 
-#chat-messages::-webkit-scrollbar-track {
-    background: #e2e8f0; /* Light blue-gray track */
-    border-radius: 10px; /* Rounded corners for the track */
+.chat-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
 }
 
-#chat-messages::-webkit-scrollbar-thumb {
-    background: #94a3b8; /* Darker blue-gray thumb */
-    border-radius: 10px; /* Rounded corners for the thumb */
+/* Share button in header */
+.share-button {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    color: #ffffff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
-#chat-messages::-webkit-scrollbar-thumb:hover {
-    background: #64748b; /* Even darker on hover */
+.share-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
 }
 
-/* --- Typing Indicator Dots Animation --- */
-.typing-indicator span {
-    animation: bounce 0.8s infinite ease-in-out;
+.share-button:active {
+    transform: scale(0.95);
 }
 
-.typing-indicator span:nth-child(2) {
-    animation-delay: 0.1s;
+/* Chat messages area */
+.chat-messages {
+    flex-grow: 1; /* Takes available space */
+    padding: 20px;
+    overflow-y: auto; /* Enable scrolling for messages */
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between messages */
+    background-color: #fdfdfd;
+    scroll-behavior: smooth; /* Smooth scrolling */
+    -webkit-overflow-scrolling: touch; /* Improves scrolling performance on iOS */
 }
 
-.typing-indicator span:nth-child(3) {
-    animation-delay: 0.2s;
+/* Message bubble styles */
+.message {
+    display: flex;
 }
 
-@keyframes bounce {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-5px);
-    }
+.user-message {
+    justify-content: flex-end; /* Align user messages to the right */
 }
 
-/* --- Typewriter Effect for AI Responses --- */
-.message.ai .typewriter-text {
-    /* Important: These properties make the typing effect possible */
-    overflow: hidden; /* Ensures text is hidden until typed */
-    white-space: pre-wrap; /* Maintains whitespace and wraps text */
-    word-break: break-word; /* Breaks long words */
-    border-right: .15em solid purple; /* The blinking cursor */
-    animation:
-        typing 3s steps(40, end), /* Adjust duration and steps based on desired speed */
-        blink-caret .75s step-end infinite;
+.ai-message {
+    justify-content: flex-start; /* Align AI messages to the left */
 }
 
-/* Keyframes for the typing animation (defined in index.html for visibility, but could be here) */
-/* @keyframes typing {
-    from { width: 0 }
-    to { width: 100% }
-}
-@keyframes blink-caret {
-    from, to { border-color: transparent }
-    50% { border-color: orange }
-} */
-
-/* Ensure the animations are cleared after text is fully typed */
-.message.ai.typed .typewriter-text {
-    border-right: none; /* Hide caret after typing */
-    animation: none; /* Stop animation after typing */
+.message-bubble {
+    padding: 12px 18px;
+    border-radius: 20px;
+    max-width: 80%; /* Limit message bubble width */
+    position: relative;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    word-wrap: break-word; /* Ensure long words wrap */
 }
 
-/* --- Input Send Button Animations (Shade In/Out) --- */
-/* Keyframes for fade animations (defined in index.html for visibility) */
-/* @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+.user-message .message-bubble {
+    background-color: #2575fc; /* User message background */
+    color: #ffffff;
+    border-bottom-right-radius: 5px; /* Pointy corner for user */
+    box-shadow: 0 2px 5px rgba(37, 117, 252, 0.2);
 }
-@keyframes fadeOut {
-    from { opacity: 1; transform: translateY(0); }
-    to { opacity: 0; transform: translateY(10px); }
-} */
 
-/* Apply to elements dynamically using JS */
-/* .fade-in, .fade-out classes are added/removed by script.js */
+.ai-message .message-bubble {
+    background-color: #e0e0e0; /* AI message background */
+    color: #333;
+    border-bottom-left-radius: 5px; /* Pointy corner for AI */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
 
-/* --- Modal Overlay (from index.html, but custom styles could be here) --- */
-/*
+/* Typing animation for AI messages */
+.ai-typing {
+    display: inline-block; /* Essential for width animation */
+    white-space: pre-wrap; /* Preserve spaces and allow wrapping */
+    overflow: hidden;
+    vertical-align: bottom; /* Align text properly */
+    opacity: 0; /* Start hidden */
+    transition: width 0.05s steps(1, end), opacity 0.5s ease-in-out;
+}
+
+.ai-message.typing .ai-typing {
+    opacity: 1; /* Make visible when typing */
+    animation: typing 0.05s steps(1, end) forwards; /* This is just for initial width, actual content uses JS */
+}
+
+/* Chat input area */
+.chat-input-area {
+    display: flex;
+    padding: 15px 20px;
+    border-top: 1px solid #eee;
+    background-color: #ffffff;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    align-items: flex-end; /* Align textarea and button at bottom */
+    gap: 10px;
+}
+
+.chat-input-area textarea {
+    flex-grow: 1; /* Take up most space */
+    border: 1px solid #ddd;
+    border-radius: 25px; /* Rounded input field */
+    padding: 12px 20px;
+    font-size: 1rem;
+    resize: none; /* Disable manual resize */
+    min-height: 40px; /* Initial height */
+    max-height: 120px; /* Max height before scrolling */
+    overflow-y: auto; /* Enable scrolling for long input */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.chat-input-area textarea:focus {
+    outline: none;
+    border-color: #2575fc;
+    box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.2);
+}
+
+/* Send button */
+.send-button {
+    background: linear-gradient(45deg, #6a11cb, #2575fc); /* Gradient send button */
+    border: none;
+    border-radius: 50%; /* Circular button */
+    width: 48px;
+    height: 48px;
+    color: #ffffff;
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+.send-button:hover {
+    background: linear-gradient(45deg, #530eaa, #1c5ec9);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.send-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.send-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Shade in/out animation for send button (triggered by JS) */
+.send-button.sending {
+    animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+/* Modal for sharing */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top, ensure it's higher than everything else */
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-    display: flex;
-    align-items: center;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.6); /* Black w/ opacity */
+    display: flex; /* Use flex for centering */
     justify-content: center;
+    align-items: center;
 }
+
 .modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 2rem;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    width: 90%;
-    max-width: 500px;
+    background-color: #ffffff;
+    margin: auto; /* Centered */
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
     position: relative;
+    width: 90%; /* Responsive width */
+    max-width: 500px; /* Max width */
+    animation: fadeInScale 0.3s ease-out;
+    z-index: 1001; /* Ensure content is above the modal background */
 }
+
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.modal-content h2 {
+    color: #6a11cb;
+    margin-top: 0;
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
 .close-button {
     color: #aaa;
     position: absolute;
-    top: 1rem;
-    right: 1.5rem;
-    font-size: 1.5rem;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+    transition: color 0.3s ease;
+    z-index: 1002; /* Ensure close button is clickable on top of modal content */
 }
+
 .close-button:hover,
 .close-button:focus {
-    color: black;
+    color: #333;
     text-decoration: none;
     cursor: pointer;
 }
-*/
 
-/* Ensure the textarea grows smoothly */
-textarea {
-    transition: height 0.2s ease-in-out;
+.share-link-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.share-link-container input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    background-color: #f9f9f9;
+    color: #555;
+    outline: none;
+}
+
+.copy-button {
+    background-color: #2575fc;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.copy-button:hover {
+    background-color: #1a5ac9;
+    transform: translateY(-1px);
+}
+.copy-button:active {
+    transform: translateY(0);
+}
+
+.social-share-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.social-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.social-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.social-button.whatsapp {
+    background-color: #25D366;
+}
+.social-button.whatsapp:hover {
+    background-color: #1dae54;
+}
+
+.social-button.telegram {
+    background-color: #0088CC;
+}
+.social-button.telegram:hover {
+    background-color: #006b9b;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .chat-container {
+        margin: 0;
+        border-radius: 0; /* No border-radius on small screens */
+        max-height: 100vh;
+    }
+
+    .chat-header {
+        border-radius: 0;
+    }
+
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .share-link-container {
+        flex-direction: column;
+    }
+
+    .copy-button {
+        width: 100%; /* Full width copy button */
+        justify-content: center;
+    }
 }
