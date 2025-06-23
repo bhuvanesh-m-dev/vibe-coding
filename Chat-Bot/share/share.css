@@ -1,0 +1,12 @@
+/*
+This file can be used for any specific styles related to sharing components
+if they are isolated. For this setup, most styles are already in style.css.
+You can import the main stylesheet here to ensure consistency if this file
+is loaded independently, or add specific overrides.
+*/
+
+/* Example: Importing the main stylesheet if this file is used standalone */
+@import url('../style.css');
+
+/* Add any share-specific styles here if needed. */
+/* For instance, if you have a unique button style only for social shares. */
