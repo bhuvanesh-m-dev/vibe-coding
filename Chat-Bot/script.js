@@ -1,167 +1,255 @@
+// Import functions from share.js for modularity
+import { generateShareUrl, copyToClipboard, shareOnWhatsApp, shareOnTelegram } from './share/share.js';
+
 document.addEventListener('DOMContentLoaded', () => {
-    const chatContainer = document.getElementById('chat-container');
-    const userInput = document.getElementById('user-input');
-    const sendButton = document.getElementById('send-button');
-    const shareButton = document.getElementById('share-button');
-    const shareModal = document.getElementById('share-modal');
-    const closeShareModalButton = document.querySelector('.close-button');
-    const shareLinkInput = document.getElementById('share-link-input');
-    const copyShareLinkButton = document.getElementById('copy-link-button');
+    const chatMessages = document.getElementById('chatMessages');
+    const userInput = document.getElementById('userInput');
+    const sendButton = document.getElementById('sendButton');
+    const shareButton = document.getElementById('shareButton');
+    const shareModal = document.getElementById('shareModal');
+    const closeShareModal = document.getElementById('closeShareModal');
+    const shareLinkInput = document.getElementById('shareLinkInput');
+    const copyShareLinkButton = document.getElementById('copyShareLink');
+    const whatsappShareButton = document.getElementById('whatsappShare');
+    const telegramShareButton = document.getElementById('telegramShare');
 
-    let isFirstInputMade = false;
-    let currentConversation = [];
+    let conversationHistory = []; // Stores the entire conversation (user and AI)
 
-    function appendMessage(sender, message) {
-        const messageWrapper = document.createElement('div');
-        messageWrapper.classList.add('flex', 'items-start', 'mb-4');
+    /**
+     * Appends a message to the chat interface.
+     * @param {string} text - The message content.
+     * @param {string} sender - 'user' or 'ai'.
+     * @param {boolean} isTypingEffect - Whether to apply a typewriter effect (only for AI).
+     */
+    function appendMessage(text, sender, isTypingEffect = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', `${sender}-message`);
 
         const messageBubble = document.createElement('div');
-        messageBubble.classList.add('p-3', 'rounded-lg', 'shadow-sm', 'max-w-xs', 'md:max-w-md');
+        messageBubble.classList.add('message-bubble');
 
-        if (sender === 'user') {
-            messageWrapper.classList.add('justify-end');
-            messageBubble.classList.add('bg-blue-100', 'text-blue-800');
+        if (isTypingEffect && sender === 'ai') {
+            const typingSpan = document.createElement('p');
+            typingSpan.classList.add('ai-typing');
+            typingSpan.setAttribute('data-full-text', text);
+            messageBubble.appendChild(typingSpan);
+            messageDiv.classList.add('typing'); // Add class to trigger CSS
+            messageDiv.appendChild(messageBubble);
+            chatMessages.appendChild(messageDiv);
+            typeWriterEffect(typingSpan, text, () => {
+                messageDiv.classList.remove('typing'); // Remove class after typing
+                scrollToBottom(); // Scroll once typing is complete
+            });
         } else {
-            const avatar = document.createElement('img');
-            avatar.src = "https://placehold.co/40x40/6b46c1/ffffff?text=CM";
-            avatar.classList.add('w-10', 'h-10', 'rounded-full', 'mr-3', 'border-2', 'border-purple-500');
-            messageWrapper.appendChild(avatar);
-            messageBubble.classList.add('bg-purple-100', 'text-purple-800');
+            messageBubble.innerHTML = `<p>${text}</p>`;
+            messageDiv.appendChild(messageBubble);
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
         }
-
-        const senderTag = document.createElement('p');
-        senderTag.classList.add('font-semibold', 'text-sm');
-        senderTag.textContent = sender === 'user' ? 'You' : 'CosmoMate';
-
-        const messageText = document.createElement('p');
-        messageText.classList.add('text-sm');
-        messageText.innerHTML = message.replace(/\n/g, '<br>');
-
-        messageBubble.appendChild(senderTag);
-        messageBubble.appendChild(messageText);
-        messageWrapper.appendChild(messageBubble);
-        chatContainer.appendChild(messageWrapper);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    async function sendMessage() {
-        const prompt = userInput.value.trim();
-        if (prompt === '') return;
+    /**
+     * Implements the typewriter effect for AI messages.
+     * @param {HTMLElement} element - The DOM element to apply the effect to.
+     * @param {string} text - The full text to type.
+     * @param {function} callback - Callback function to execute after typing is complete.
+     */
+    function typeWriterEffect(element, text, callback) {
+        let i = 0;
+        element.style.opacity = '1'; // Ensure it's visible
+        element.style.width = 'fit-content'; // Allow content to dictate width
 
-        currentConversation.push({ role: 'user', content: prompt });
-        appendMessage('user', prompt);
-        userInput.value = '';
-
-        if (!isFirstInputMade) {
-            shareButton.classList.remove('hidden');
-            isFirstInputMade = true;
+        function type() {
+            if (i < text.length) {
+                element.textContent += text.charAt(i);
+                i++;
+                requestAnimationFrame(type); // Use requestAnimationFrame for smoother animation
+            } else {
+                if (callback) callback();
+            }
         }
+        type();
+    }
+
+    /**
+     * Scrolls the chat messages area to the bottom.
+     */
+    function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    /**
+     * Adjusts the height of the textarea based on its content.
+     */
+    function adjustTextareaHeight() {
+        userInput.style.height = 'auto'; // Reset height
+        userInput.style.height = userInput.scrollHeight + 'px'; // Set to scroll height
+    }
+
+    /**
+     * Handles sending a message to the LLM (via a PHP proxy).
+     * @param {string} message - The user's message.
+     */
+    async function sendMessage(message) {
+        if (message.trim() === '') return;
+
+        // Add user message to history and display
+        conversationHistory.push({ role: 'user', content: message });
+        appendMessage(message, 'user');
+        userInput.value = ''; // Clear input
+        adjustTextareaHeight(); // Reset textarea height
+
+        sendButton.disabled = true;
+        sendButton.classList.add('sending'); // Add animation class
 
         try {
-            await fetch('api.php', {
+            // Placeholder for API call to your PHP backend
+            // Your PHP backend (api.php) will then call OpenRouter API.
+            const response = await fetch('api.php', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `action=save&prompt=${encodeURIComponent(prompt)}`
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    messages: conversationHistory, // Send the full conversation history
+                }),
             });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            const aiResponse = data.reply; // Assuming your PHP returns { reply: "..." }
+
+            // Add AI response to history and display with typing effect
+            conversationHistory.push({ role: 'ai', content: aiResponse });
+            appendMessage(aiResponse, 'ai', true);
+
         } catch (error) {
-            console.error('Error saving prompt:', error);
+            console.error('Error sending message:', error);
+            appendMessage(`Sorry, an error occurred: ${error.message}. Please try again.`, 'ai');
+        } finally {
+            sendButton.disabled = false;
+            sendButton.classList.remove('sending'); // Remove animation class
+            scrollToBottom(); // Final scroll to ensure visibility
+        }
+    }
+
+    /**
+     * Initializes the chat, checks for shared conversation URL.
+     */
+    function initializeChat() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const shareId = urlParams.get('share');
+
+        if (shareId) {
+            // If a share ID is present, load the conversation
+            // This part is actually handled by share-viewer.js now for a dedicated page.
+            // On index.html, we just show the welcome message if no share ID.
+            // This 'if' block primarily ensures the initial message appears only on a fresh start.
         }
 
-        const loadingMessage = document.createElement('div');
-        loadingMessage.classList.add('ai-message', 'mr-auto', 'bg-gray-200', 'text-gray-800', 'chat-bubble', 'shadow-md', 'rounded-lg', 'p-3', 'relative');
-        loadingMessage.innerHTML = `<div class="flex items-center"><i class="fas fa-spinner fa-spin mr-2"></i> Thinking...</div>`;
-        chatContainer.appendChild(loadingMessage);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+        // Show the initial AI welcome message with typing effect
+        const initialAiMessageElement = document.querySelector('.ai-message .ai-typing');
+        if (initialAiMessageElement) {
+            const fullText = initialAiMessageElement.getAttribute('data-full-text');
+            initialAiMessageElement.textContent = ''; // Clear content for typing effect
+            typeWriterEffect(initialAiMessageElement, fullText, () => {
+                // Do nothing or maybe enable input after welcome
+            });
+        }
+    }
 
+
+    // Event Listeners
+    sendButton.addEventListener('click', () => {
+        sendMessage(userInput.value);
+    });
+
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) { // Send on Enter, new line on Shift+Enter
+            e.preventDefault(); // Prevent default new line
+            sendMessage(userInput.value);
+        }
+    });
+
+    userInput.addEventListener('input', adjustTextareaHeight);
+
+    // Share button click
+    shareButton.addEventListener('click', async () => {
+        const conversationToShare = conversationHistory;
+
+        // Make sure conversation history is not empty before attempting to share
+        if (conversationToShare.length === 0 || (conversationToShare.length === 1 && conversationToShare[0].role === 'ai' && conversationToShare[0].content.includes("Hello! I'm CosmoMate"))) {
+            alert("Start a conversation first before sharing!");
+            return;
+        }
+
+        let shareId;
         try {
             const response = await fetch('api.php', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json',
                 },
-                body: `prompt=${encodeURIComponent(prompt)}`
+                body: JSON.stringify({
+                    action: 'save_conversation',
+                    conversation: conversationToShare
+                }),
             });
 
-            chatContainer.removeChild(loadingMessage);
-
-            const data = await response.json();
-            if (data.status === 'success') {
-                currentConversation.push({ role: 'ai', content: data.message });
-                appendMessage('ai', data.message);
-            } else {
-                appendMessage('ai', `Error: ${data.message || 'Something went wrong.'}`);
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `Failed to save conversation for sharing. Status: ${response.status}`);
             }
+            const data = await response.json();
+            shareId = data.shareId; // Assuming PHP returns { shareId: "..." }
+
         } catch (error) {
-            chatContainer.removeChild(loadingMessage);
-            appendMessage('ai', `Error: Could not connect to server. (${error.message})`);
+            console.error("Error saving conversation for sharing:", error);
+            alert("Could not save conversation for sharing. Please try again.");
+            return; // Stop if saving failed
         }
-    }
 
-    sendButton.addEventListener('click', sendMessage);
-    userInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendMessage();
-    });
 
-    shareButton.addEventListener('click', async () => {
-        if (currentConversation.length === 0) return;
-        shareLinkInput.value = 'Generating link...';
-        shareModal.classList.remove('hidden');
+        if (shareId) {
+            // IMPORTANT: The share-viewer.html is in the 'share' subdirectory.
+            // Adjust this URL to point to your deployed share-viewer.html.
+            const shareViewerBaseUrl = `${window.location.origin}/chat/share/share-viewer.html`;
+            const shareUrl = generateShareUrl(shareViewerBaseUrl, shareId);
+            shareLinkInput.value = shareUrl;
 
-        try {
-            const response = await fetch('api.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'share', conversation: currentConversation })
-            });
+            // Set social share links
+            whatsappShareButton.href = shareOnWhatsApp(shareUrl);
+            telegramShareButton.href = shareOnTelegram(shareUrl);
 
-            const data = await response.json();
-            if (data.status === 'success') {
-                shareLinkInput.value = data.share_url;
-            } else {
-                shareLinkInput.value = 'Error generating link';
-            }
-        } catch (error) {
-            console.error('Error sharing conversation:', error);
-            shareLinkInput.value = 'Error generating link';
+            shareModal.style.display = 'flex'; // Show modal
         }
     });
 
-    closeShareModalButton.addEventListener('click', () => {
-        shareModal.classList.add('hidden');
+    // Close share modal
+    closeShareModal.addEventListener('click', () => {
+        shareModal.style.display = 'none';
     });
 
+    // Copy share link to clipboard
     copyShareLinkButton.addEventListener('click', () => {
-        navigator.clipboard.writeText(shareLinkInput.value).then(() => {
-            copyShareLinkButton.innerHTML = '<i class="fas fa-check mr-1"></i> Copied!';
-            setTimeout(() => {
-                copyShareLinkButton.innerHTML = '<i class="fas fa-copy mr-1"></i> Copy';
-            }, 1500);
-        });
+        copyToClipboard(shareLinkInput.value);
+        copyShareLinkButton.textContent = 'Copied!';
+        setTimeout(() => {
+            copyShareLinkButton.innerHTML = '<i class="fas fa-copy"></i> Copy';
+        }, 2000);
     });
 
-    async function loadSharedConversation() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const shareId = urlParams.get('share');
-        if (!shareId) return;
-
-        try {
-            const response = await fetch(`api.php?action=load_share&id=${encodeURIComponent(shareId)}`);
-            const data = await response.json();
-            if (data.status === 'success' && data.conversation) {
-                currentConversation = data.conversation;
-                chatContainer.innerHTML = '';
-                currentConversation.forEach(msg => appendMessage(msg.role, msg.content));
-                shareButton.classList.remove('hidden');
-                shareButton.textContent = 'Share This Conversation';
-                isFirstInputMade = true;
-            } else {
-                appendMessage('ai', `Could not load conversation: ${data.message || 'Invalid ID.'}`);
-            }
-        } catch (error) {
-            appendMessage('ai', `Failed to load conversation. (${error.message})`);
+    // Close modal if clicked outside
+    window.addEventListener('click', (event) => {
+        if (event.target === shareModal) {
+            shareModal.style.display = 'none';
         }
-    }
+    });
 
-    loadSharedConversation();
+    // Initialize chat on page load
+    initializeChat();
 });
-
