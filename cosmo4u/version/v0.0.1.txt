@@ -1,0 +1,8 @@
+Download the latest cosmo4u_0.0.1.deb from the webpage.
+Open terminal with Ctrl + Alt + T.
+Navigate to your Downloads folder.
+Run: sudo dpkg -i cosmo4u_0.0.1.deb
+Fix errors (if any) with: sudo apt --fix-broken install
+Launch using: cosmo4u
+
+
