@@ -1,0 +1,101 @@
+/* Setbian Theme Customizations */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f8fafc;
+  color: #1e293b;
+}
+.hero-gradient {
+  background: linear-gradient(135deg, #4F46E5 0%, #818CF8 100%);
+}
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+footer {
+  background: #3730A3;
+  color: #fff;
+  padding: 2rem 0 1rem 0;
+  text-align: center;
+  font-size: 1rem;
+}
+footer a {
+  color: #818CF8;
+  margin: 0 0.5rem;
+  transition: color 0.2s;
+}
+footer a:hover {
+  color: #fff;
+}
+.nav-social {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+#downloadBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 30px;
+  background-color: #4F46E5;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.2em;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+#downloadBtn:hover {
+  background-color: #3730A3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+#downloadBtn:active {
+  background-color: #22216c;
+  transform: translateY(0px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+#downloadIcon {
+  margin-right: 10px;
+  font-size: 1.5em;
+  line-height: 1;
+  transition: transform 0.3s;
+}
+#thankYouMessage {
+  margin-top: 20px;
+  font-size: 1.5em;
+  color: #333;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+/* Up Arrow Button Styles */
+#upArrowBtn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 100;
+  display: none;
+  background: #4F46E5;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  transition: background 0.2s, transform 0.2s, opacity 0.3s;
+  opacity: 0.85;
+}
+#upArrowBtn:hover {
+  background: #3730A3;
+  transform: translateY(-4px) scale(1.08);
+  opacity: 1;
+}
