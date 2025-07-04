@@ -2,6 +2,8 @@
 const downloadBtn = document.getElementById('downloadBtn');
 const downloadIcon = document.getElementById('downloadIcon');
 const thankYouMessage = document.getElementById('thankYouMessage');
+const stepByStepCommands = document.getElementById('stepByStepCommands');
+const thankYouStandalone = document.getElementById('thankYouStandalone');
 
 if (downloadBtn) {
   // Button hover/active effects are handled by CSS
@@ -37,17 +39,30 @@ if (downloadBtn) {
     startSpinAnimation();
     setTimeout(() => {
       stopSpinAnimation();
-      thankYouMessage.style.opacity = '1';
-      thankYouMessage.style.transform = 'translateY(0px)';
-      setTimeout(() => {
-        thankYouMessage.style.opacity = '0';
-        thankYouMessage.style.transform = 'translateY(20px)';
-      }, 5000);
-      // Actual download
+      thankYouMessage.style.display = 'block';
+      if (stepByStepCommands) stepByStepCommands.style.display = 'block';
+      if (thankYouStandalone) thankYouStandalone.style.display = 'block';
       window.location.href = 'https://github.com/bhuvanesh-m-dev/setbian/releases/download/v0.0.3/setbian-0.0.3.deb';
     }, 800);
   });
 }
+// Copy-to-clipboard for step-by-step commands
+document.addEventListener('DOMContentLoaded', function() {
+  var stepCopyBtns = document.querySelectorAll('.copyStepBtn');
+  stepCopyBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var cmdId = btn.getAttribute('data-cmd');
+      var cmdElem = document.getElementById(cmdId);
+      if (cmdElem) {
+        navigator.clipboard.writeText(cmdElem.innerText).then(function() {
+          var oldText = btn.textContent;
+          btn.textContent = 'Copied';
+          setTimeout(function() { btn.textContent = oldText; }, 3000);
+        });
+      }
+    });
+  });
+});
 
 // Mobile menu toggle
 const mobileMenuBtn = document.getElementById('mobile-menu-button');
