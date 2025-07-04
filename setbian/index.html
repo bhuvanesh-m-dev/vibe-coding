@@ -196,7 +196,33 @@ setbian
             <div id="downloadBtn">
               <span id="downloadIcon">&#x2B07;</span> Download .deb
             </div>
-            <div id="thankYouMessage">Thank you for downloading Setbian for Debian!</div>
+            <div id="thankYouMessage" class="thankyou-standalone-message" style="display:none;">Thank you for downloading Setbian for Debian!</div>
+            <!-- Standalone Thank You + Steps for retrieval -->
+            <div id="thankYouStandalone" style="display:none;">
+              <div class="thankyou-standalone-container">
+                <div class="thankyou-standalone-message">Thank you for downloading Setbian for Debian!</div>
+                <div class="thankyou-standalone-steps mt-8 space-y-4 text-left max-w-xl mx-auto">
+                  <div>
+                    <span class="block text-xs text-gray-500 mb-1">1. Go to your Downloads folder</span>
+                    <div class="relative">
+                      <pre class="bg-gray-100 rounded p-2 text-sm text-gray-800 select-all"><code>cd ~/Downloads</code></pre>
+                    </div>
+                  </div>
+                  <div>
+                    <span class="block text-xs text-gray-500 mb-1">2. Install the downloaded .deb package</span>
+                    <div class="relative">
+                      <pre class="bg-gray-100 rounded p-2 text-sm text-gray-800 select-all"><code>sudo dpkg -i setbian-0.0.3.deb</code></pre>
+                    </div>
+                  </div>
+                  <div>
+                    <span class="block text-xs text-gray-500 mb-1">3. Launch Setbian</span>
+                    <div class="relative">
+                      <pre class="bg-gray-100 rounded p-2 text-sm text-gray-800 select-all"><code>setbian</code></pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
