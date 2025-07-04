@@ -1,3 +1,51 @@
+/* Thank You Message Styling for Download Section */
+.thankyou-standalone-message {
+  margin-top: 24px;
+  margin-bottom: 0;
+  font-size: 1.35em;
+  color: #2563eb;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-align: center;
+  background: linear-gradient(90deg, #e0e7ff 0%, #f0fdfa 100%);
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 12px 0 rgba(80, 112, 255, 0.08);
+  padding: 1.1rem 1.5rem 1.1rem 1.5rem;
+  border: 1.5px solid #6366f1;
+  transition: opacity 0.5s, transform 0.5s;
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Thank You Standalone Section Styling */
+.thankyou-standalone-container {
+  background: linear-gradient(90deg, #e0e7ff 0%, #f0fdfa 100%);
+  border-radius: 1rem;
+  box-shadow: 0 4px 24px 0 rgba(80, 112, 255, 0.08);
+  padding: 2.5rem 1.5rem 2rem 1.5rem;
+  margin: 2rem auto 0 auto;
+  max-width: 480px;
+  text-align: center;
+  border: 1.5px solid #6366f1;
+}
+.thankyou-standalone-message {
+  color: #2563eb;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.01em;
+  text-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
+}
+.thankyou-standalone-steps pre {
+  background: #f3f4f6;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+.thankyou-standalone-steps span {
+  color: #6b7280;
+}
 /* Setbian Theme Customizations */
 body {
   font-family: 'Inter', sans-serif;
@@ -98,4 +146,12 @@ footer a:hover {
   background: #3730A3;
   transform: translateY(-4px) scale(1.08);
   opacity: 1;
+}
+#thankYouMessage {
+  margin-top: 20px;
+  font-size: 1.5em;
+  color: #333;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s, transform 0.5s;
 }
